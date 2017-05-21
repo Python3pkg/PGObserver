@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import datadb
 import psycopg2
 import psycopg2.extras
@@ -99,7 +99,7 @@ def getLoadReportData(hostId=None, weeks=10):
     cur.close()
     conn.close()
 
-    return sorted(data.values(), key = lambda x : hosts.hosts[x[0]['id']]['uishortname'])
+    return sorted(list(data.values()), key = lambda x : hosts.hosts[x[0]['id']]['uishortname'])
 
 
 def getLoadReportDataDailyAvg(hostId, weeks=10):
@@ -264,7 +264,7 @@ def getIndexIssues(uishortname):
             data_unused += cur.fetchall()
             cur.execute(q_duplicate, (h['host_ui_shortname'],))
             data_duplicate += cur.fetchall()
-        except Exception, e:
+        except Exception as e:
             print ('ERROR could not connect to {}:{}'.format(h['host_name'], e))
             data_noconnect.append(h)
         finally:
@@ -517,11 +517,11 @@ def apply_average(datarow, minutes, time_delta, keys_to_skip=[]):
     if time_delta.seconds <= 1 * 60:
         return datarow
     divisor = time_delta.seconds / float(minutes * 60)
-    for key in datarow.keys():
+    for key in list(datarow.keys()):
         if key not in keys_to_skip:
             if datarow[key] <= 1:   # special handling not to miss really incremental stuff
                 continue
-            datarow[key] = long(round(datarow[key] / divisor))
+            datarow[key] = int(round(datarow[key] / divisor))
     return datarow
 
 

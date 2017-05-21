@@ -12,13 +12,13 @@ class HostsFrontend(object):
         show_hosts_page = tplE._settings.get('show_hosts_page', True)
         if show_hosts_page:
             allHosts = hosts.getAllHostsData()
-            allHosts = sorted(allHosts.iteritems(), key=lambda h: h[1][sortkey])
+            allHosts = sorted(iter(allHosts.items()), key=lambda h: h[1][sortkey])
         tmpl = tplE.env.get_template('hosts.html')
         return tmpl.render(all_hosts=allHosts, show_hosts_page=show_hosts_page,
                            target='World')
 
     def raw(self):
-        return list(h[1] for h in sorted(hosts.getAllHostsData().iteritems()))
+        return list(h[1] for h in sorted(hosts.getAllHostsData().items()))
 
     def save(self, **params):
         try:

@@ -58,5 +58,5 @@ def execute(sql, params=None):
 
 if __name__ == '__main__':
     init_connection_pool(host='localhost', user='postgres', password='postgres')
-    print execute('select current_database() as a')
-    print executeAsDict('select 1 as a')
+    print(execute('select current_database() as a'))
+    print(executeAsDict('select 1 as a'))

@@ -45,8 +45,8 @@ def executeOnHost(hostname, port, dbname, user, password, sql, params=None):
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         cur.execute(sql, params)
         data = cur.fetchall()
-    except Exception, e:
-        print ('ERROR execution failed on {}: {}'.format(hostname, e))
+    except Exception as e:
+        print(('ERROR execution failed on {}: {}'.format(hostname, e)))
         msg = 'ERROR execution failed on {}: {}'.format(hostname, e)
     finally:
         if conn and not conn.closed:
@@ -55,4 +55,4 @@ def executeOnHost(hostname, port, dbname, user, password, sql, params=None):
 
 
 if __name__ == '__main__':
-    print executeOnHost('localhost', 5432, 'local_pgobserver_db', 'postgres', 'postgres', 'select 1')
+    print(executeOnHost('localhost', 5432, 'local_pgobserver_db', 'postgres', 'postgres', 'select 1'))

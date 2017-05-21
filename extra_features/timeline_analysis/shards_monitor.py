@@ -24,7 +24,7 @@ args = argp.parse_args()
 if not args.user:
     args.user = os.getenv('PGUSER')
     if not args.user:
-        print '--user is required if no PGUSER set'
+        print('--user is required if no PGUSER set')
         exit(1)
 
 logging.basicConfig(level=(logging.DEBUG if args.verbose else logging.WARNING))

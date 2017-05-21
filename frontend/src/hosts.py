@@ -34,7 +34,7 @@ def resetHostsAndGroups():
 
 
 def uiShortnameToHostId(shortname):
-    for host_id, settings in getAllHosts().iteritems():
+    for host_id, settings in getAllHosts().items():
         if settings['uishortname'].lower().replace('-','') == shortname:    # TODO replacing thing is stupid
             return host_id
     raise Exception('specified uiShortName {0} not found! check the monitor_data.hosts table...'.format(shortname,))
@@ -44,11 +44,11 @@ def hostIdToUiShortname(hostId):
     return getAllHosts()[int(hostId)]['uishortname'].lower().replace('-','')
 
 def getAllHostNames():
-    ret = [ x[1]['host_name'] for x in getHosts().items() ]
+    ret = [ x[1]['host_name'] for x in list(getHosts().items()) ]
     return sorted(ret)
 
 def uiShortNameToHostName(ui_short):
-    for id, data in getAllHosts().iteritems():
+    for id, data in getAllHosts().items():
         if data['uishortname'] == ui_short:
             return data['host_name']
     raise Exception('No host_name match found for ' + ui_short)
@@ -110,7 +110,7 @@ def getAllHosts(force_refresh_from_db=False):
     return all_hosts
 
 def getAllHostUinamesSorted():
-    return sorted([x[1]['uishortname'] for x in getAllHosts().items()])
+    return sorted([x[1]['uishortname'] for x in list(getAllHosts().items())])
 
 def getLastInsertedHostUserAndPassword():
     sql_user = """select host_user from hosts where host_enabled and host_user is not null order by host_created desc limit 1"""
@@ -128,7 +128,7 @@ def saveHost(hostDict):
     if 'host_id' not in hostDict:   # insert new host
         sql_last_user, sql_last_pw = getLastInsertedHostUserAndPassword()
         sql = "INSERT INTO hosts ("
-        for k, v in hostDict.iteritems():
+        for k, v in hostDict.items():
             sql_cols += k + ","
             sql_vals.append(v)
         sql_cols += "host_user, host_password"
@@ -141,7 +141,7 @@ def saveHost(hostDict):
         hostDict.pop('host_id')
         hostDict.update({'host_last_modified':'now'})
         sql = "UPDATE hosts SET\n"
-        for k, v in hostDict.iteritems():
+        for k, v in hostDict.items():
             sql_cols += k + "=%s,\n"
             sql_vals.append(v)
         sql_cols = sql_cols.strip(",\n")
@@ -165,7 +165,7 @@ def getGroupsData():
     return groups
 
 def getHostByHostname(hostname):
-    for h_id, h_data in getHosts().iteritems():
+    for h_id, h_data in getHosts().items():
         if h_data['host_name'] == hostname:
             return h_data
     raise Exception('Could not find host: ' +hostname)
@@ -216,12 +216,12 @@ def isHostFeatureEnabled(hostId, featureText):
 
 def getActiveFeatures(hostId):
     hostData = getHosts()[hostId]
-    return [s for s, v in hostData['settings'].iteritems() if v > 0]
+    return [s for s, v in hostData['settings'].items() if v > 0]
 
 
 def getHostsWithFeature(feature):
     ret = {}
-    for hostid, data in getHosts().iteritems():
+    for hostid, data in getHosts().items():
         if data['settings'].get(feature, 0) > 0:
             ret[hostid] = data
     return ret
@@ -229,7 +229,7 @@ def getHostsWithFeature(feature):
 
 def getHostsWithFeatureAsShortnames(feature):
     hosts_with_schema_gathering_enabled = getHostsWithFeature(feature)
-    uishortnames = [x['host_ui_shortname'] for x in hosts_with_schema_gathering_enabled.values()]
+    uishortnames = [x['host_ui_shortname'] for x in list(hosts_with_schema_gathering_enabled.values())]
     uishortnames.sort()
     return uishortnames
 
@@ -239,5 +239,5 @@ if __name__ == '__main__':
     # print (getHostsDataForConnecting())
     # print (isHostFeatureEnabled(3, 'loadGatherInterval'))
     # print (getHostsWithFeature('indexStatsGatherInterval'))
-    print (getActiveFeatures(1000))
-    print (getAllHostUinamesSorted())
+    print((getActiveFeatures(1000)))
+    print((getAllHostUinamesSorted()))

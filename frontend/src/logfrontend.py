@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import logdata
 import flotgraph
 import time

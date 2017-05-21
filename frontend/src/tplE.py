@@ -19,7 +19,7 @@ def setup(settings = None):
     env.globals['hosts'] = hosts.getHostData()
     env.globals['hosts_json'] = json.dumps(env.globals['hosts'])
     env.globals['settings'] = _settings
-    hl = sorted(env.globals['hosts'].values(), key=lambda h: h['uishortname'])
+    hl = sorted(list(env.globals['hosts'].values()), key=lambda h: h['uishortname'])
 
     gs = {}
     hlf = []
@@ -37,13 +37,13 @@ def setup(settings = None):
 
     groups = {}
 
-    for h in hosts.getHosts().values():
+    for h in list(hosts.getHosts().values()):
         if not (h['host_group_id'] in groups):
             groups[h['host_group_id']] = []
 
         groups[h['host_group_id']].append(h)
 
-    for g in groups.keys(): # TODO remove?
+    for g in list(groups.keys()): # TODO remove?
         groups[g] = sorted(groups[g], key = lambda x : x['uishortname'])
 
     env.globals['hostgroups'] = groups

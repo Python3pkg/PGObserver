@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import psycopg2
 import psycopg2.extras
 import time
@@ -127,12 +127,12 @@ def makePrettySize(size):
     if size <= 1024:
         return sign + str(size) + ' B'
     if size < 10 * 1024**2:
-        return sign + str(long(round(size / float(1024)))) + ' kB'
+        return sign + str(int(round(size / float(1024)))) + ' kB'
     if size < 10 * 1024**3:
-        return sign + str(long(round(size / float(1024**2)))) + ' MB'
+        return sign + str(int(round(size / float(1024**2)))) + ' MB'
     if size < 10 * 1024**4:
-        return sign + str(long(round(size / float(1024**3)))) + ' GB'
-    return sign + str(long(round(size / float(1024**4)))) + ' TB'
+        return sign + str(int(round(size / float(1024**3)))) + ' GB'
+    return sign + str(int(round(size / float(1024**4)))) + ' TB'
 
 
 def makePrettyCounter(count):

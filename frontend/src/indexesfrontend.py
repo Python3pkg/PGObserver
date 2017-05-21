@@ -35,7 +35,7 @@ class IndexesFrontend(object):
         i=0
         for x in data:
             one_index_graphs=[]
-            for k,v in x['data'].iteritems():
+            for k,v in x['data'].items():
                 i+=1
                 if k == 'size':
                     graph = flotgraph.SizeGraph ("index"+str(i),"right")

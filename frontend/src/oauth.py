@@ -1,6 +1,6 @@
 import cherrypy
 import requests
-from urllib import urlencode
+from urllib.parse import urlencode
 
 import aws_s3_configreader
 
@@ -46,7 +46,7 @@ class Oauth(cherrypy.Tool):
                 try:
                     response = requests.post(self.access_token_url, data=data, auth=(self.client_id, self.client_secret))
                 except Exception as e:
-                    print 'post to auth server failed', e
+                    print('post to auth server failed', e)
                     continue
                 if response.json().get('access_token'):
                     access_token = response.json()['access_token']
@@ -55,14 +55,14 @@ class Oauth(cherrypy.Tool):
                     # redirect to endpoint where user attempted to access
                     raise cherrypy.HTTPRedirect(target_url)
                 else:
-                    print 'response from auth server', response.json()
+                    print('response from auth server', response.json())
                     response.close()
             raise Exception('Failed to retrieved access-token from server!')    # shouldn't reach here normally
 
         elif error and error_description:
             # this can occur when, for example, user denies access at self.authorize_url
             # in case of error e.g. access-denied we keep the target_url state intact
-            print cherrypy.url(qs=cherrypy.request.query_string)
+            print(cherrypy.url(qs=cherrypy.request.query_string))
         else:
             # clean url; no special oauth parameters
             # remember endpoint where user attempts to access; may be passed to self.authorize_url

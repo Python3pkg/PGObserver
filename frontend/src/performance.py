@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import reportdata
 import datetime
 import time
@@ -155,7 +155,7 @@ class PerfUnusedSchemas(object):
 
         if uishortname:
             data = reportdata.get_schema_usage_for_host(uishortname, from_date, to_date, filter)
-            for schema_name, data in data.iteritems():
+            for schema_name, data in data.items():
                 g_calls = flotgraph.Graph (schema_name + "_calls")
                 g_calls.addSeries('Sproc calls', 'calls')
                 g_iud = flotgraph.Graph (schema_name + "_iud")

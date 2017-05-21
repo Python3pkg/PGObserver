@@ -1,4 +1,4 @@
-from Queue import Queue
+from queue import Queue
 from argparse import ArgumentParser
 from datetime import datetime, timedelta
 from influxdb.exceptions import InfluxDBClientError
@@ -100,7 +100,7 @@ def idb_write_points(ui_shortname, measurement, column_names, tag_names, data_by
             raise Exception('Some required columns missing!')
 
         for d in data:
-            field_data = dict((x[0], x[1]) for x in d.iteritems() if x[0] in column_names and x[0] not in tag_names)
+            field_data = dict((x[0], x[1]) for x in d.items() if x[0] in column_names and x[0] not in tag_names)
             dataset.append({
                 "measurement": measurement,
                 "time": d['time'],  # epoch_seconds

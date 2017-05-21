@@ -58,9 +58,9 @@ def main():
         args.config = os.path.expanduser(args.config)
 
         if not os.path.exists(args.config):
-            print 'WARNING. Config file {} not found! exiting...'.format(args.config)
+            print('WARNING. Config file {} not found! exiting...'.format(args.config))
             return
-        print "trying to read config file from {}".format(args.config)
+        print("trying to read config file from {}".format(args.config))
         with open(args.config, 'rb') as fd:
             settings = yaml.load(fd)
 
@@ -72,9 +72,9 @@ def main():
     settings['database']['frontend_password'] = (os.getenv('PGOBS_PASSWORD') or settings['database'].get('frontend_password'))
 
     if not (settings['database'].get('host') and settings['database'].get('name') and settings['database'].get('frontend_user')):
-        print 'Mandatory datastore connect details missing!'
-        print 'Check --config input or environment variables: PGOBS_HOST, PGOBS_DATABASE, PGOBS_USER, PGOBS_PASSWORD [, PGOBS_PORT]'
-        print ''
+        print('Mandatory datastore connect details missing!')
+        print('Check --config input or environment variables: PGOBS_HOST, PGOBS_DATABASE, PGOBS_USER, PGOBS_PASSWORD [, PGOBS_PORT]')
+        print('')
         parser.print_help()
         return
 
@@ -84,7 +84,7 @@ def main():
         'user=' + settings['database']['frontend_user'],
         'port=' + str(settings['database']['port']),
     ))
-    print 'Setting connection string to ... ' + conn_string
+    print('Setting connection string to ... ' + conn_string)
     # finished print conn_string to the world, password can be added
     conn_string = conn_string + ' password=' + settings['database']['frontend_password']
 
@@ -124,7 +124,7 @@ def main():
     root.healthcheck = Healthcheck()
 
     if settings.get('oauth', {}).get('enable_oauth', False):
-        print 'switching on oauth ...'
+        print('switching on oauth ...')
         import oauth
         root.oauth = oauth.Oauth(settings['oauth'])
         cherrypy.config.update({'tools.oauthtool.on': True, 'tools.sessions.on': True,

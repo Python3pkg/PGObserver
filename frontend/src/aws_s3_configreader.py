@@ -1,6 +1,6 @@
 import re
 import boto
-from StringIO import StringIO
+from io import StringIO
 import yaml
 import json
 

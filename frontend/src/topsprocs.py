@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
+
 import psycopg2
 import psycopg2.extras
 import time
@@ -16,7 +16,7 @@ def makeTimeIntervalReadable(total_millis):
     h = int(m/60)
 
     if total_millis < 1:
-        return unicode(str(int(total_millis * 1000))) + u"μs"
+        return str(str(int(total_millis * 1000))) + "μs"
     if s == 0:
         return str(int(total_millis)) + "ms"
     if m == 0:

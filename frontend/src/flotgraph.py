@@ -23,7 +23,7 @@ class Graph(object):
 
     def render(self):
         g = env.get_template('base.html')
-        return g.render(graphContainer=self.graphContainer, data=self.data.values(), legendPosition=self.legendPositions , labelWidth=self.labelWidth)
+        return g.render(graphContainer=self.graphContainer, data=list(self.data.values()), legendPosition=self.legendPositions , labelWidth=self.labelWidth)
 
     def addPoint(self, name, x, y):
         if not ( name in self.data ):
@@ -48,7 +48,7 @@ class MultiLegendGraph( Graph ):
 
     def render(self):
         g = env.get_template('baseMultiLegend.html')
-        return g.render(graphContainer=self.graphContainer, data=self.data.values(), legendPosition=self.legendPositions)
+        return g.render(graphContainer=self.graphContainer, data=list(self.data.values()), legendPosition=self.legendPositions)
 
 class TimeGraph ( Graph ):
     def __init__(self, graphContainer=None, legendPositions=None):
@@ -56,7 +56,7 @@ class TimeGraph ( Graph ):
 
     def render(self):
         g = env.get_template('data_time_graph.html')
-        return g.render(graphContainer=self.graphContainer, data=self.data.values(), legendPosition=self.legendPositions)
+        return g.render(graphContainer=self.graphContainer, data=list(self.data.values()), legendPosition=self.legendPositions)
 
 class SizeGraph ( Graph ):
     def __init__(self, graphContainer=None, legendPositions=None,labelWidth=80):
@@ -64,7 +64,7 @@ class SizeGraph ( Graph ):
 
     def render(self):
         g = env.get_template('data_size_graph.html')
-        return g.render(graphContainer=self.graphContainer, data=self.data.values(), legendPosition=self.legendPositions,labelWidth=self.labelWidth)
+        return g.render(graphContainer=self.graphContainer, data=list(self.data.values()), legendPosition=self.legendPositions,labelWidth=self.labelWidth)
 
 class BarGraph ( Graph ):
     def __init__(self, graphContainer=None, legendPositions=None,labelWidth=80):
@@ -72,7 +72,7 @@ class BarGraph ( Graph ):
 
     def render(self):
         g = env.get_template('barBase.html')
-        return g.render(graphContainer=self.graphContainer, data=self.data.values(), legendPosition=self.legendPositions,labelWidth=self.labelWidth)
+        return g.render(graphContainer=self.graphContainer, data=list(self.data.values()), legendPosition=self.legendPositions,labelWidth=self.labelWidth)
 
 class SelectableGraph(Graph):
     def __init__(self, graphContainer=None, choiceContainer=None):
@@ -86,4 +86,4 @@ class SelectableGraph(Graph):
 
     def render(self):
         g = env.get_template('selectable.html')
-        return g.render(choiceContainer=self.choiceContainer, graphContainer=self.graphContainer, data=self.data.values())
+        return g.render(choiceContainer=self.choiceContainer, graphContainer=self.graphContainer, data=list(self.data.values()))

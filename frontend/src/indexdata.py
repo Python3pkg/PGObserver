@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import psycopg2
 import psycopg2.extras
 import time

@@ -40,7 +40,7 @@ def create_hosts(cur, host_id, host_name, host_db):
 
 
 def clear_test_data(cur, host_id):
-    print 'Clearing test data...'
+    print('Clearing test data...')
 
     cur.execute('DELETE FROM sproc_performance_data WHERE sp_sproc_id IN ( SELECT sproc_id FROM sprocs WHERE sproc_host_id = %s )'
                 , (host_id, ))
@@ -60,7 +60,7 @@ def clear_test_data(cur, host_id):
 
 
 def create_n_sprocs(cur, host_id, n):
-    print 'Creating stored procedures...'
+    print('Creating stored procedures...')
 
     i = 0
     while i < n:
@@ -70,7 +70,7 @@ def create_n_sprocs(cur, host_id, n):
 
 
 def create_n_tables(cur, host_id, n):
-    print 'Creating tables...'
+    print('Creating tables...')
 
     i = 0
     while i < n:
@@ -82,13 +82,13 @@ def create_n_tables(cur, host_id, n):
 def create_sproc_data(cur, host_id, nr_of_sprocs, days, interval):
     create_n_sprocs(cur, host_id, nr_of_sprocs)
 
-    print 'Creating stored procedure data points...'
+    print('Creating stored procedure data points...')
 
     cur.execute('SELECT sproc_id FROM sprocs WHERE sproc_host_id = %s', (host_id, ))
     sproc_ids = [x[0] for x in cur.fetchall()]
 
     for s in sproc_ids:
-        print '\t\tInserting data for sproc_id:', s
+        print('\t\tInserting data for sproc_id:', s)
 
         sql = """INSERT INTO sproc_performance_data(
                                 sp_timestamp, sp_host_id, sp_sproc_id,
@@ -114,12 +114,12 @@ def create_sproc_data(cur, host_id, nr_of_sprocs, days, interval):
 def create_stat_statement_data(cur, host_id, nr_of_statements, days, interval):
     create_n_sprocs(cur, host_id, nr_of_statements)
 
-    print 'Creating stat_statement data points...'
+    print('Creating stat_statement data points...')
     stmts = ["select somequery{};".format(x) for x in range(nr_of_statements)]
     stmt_ids = [("select somequery{};".format(x)).__hash__() for x in range(nr_of_statements)]
 
     for stmt, stmt_id in zip(stmts, stmt_ids):
-        print '\t\tInserting data for statement:', stmt
+        print('\t\tInserting data for statement:', stmt)
 
         sql = """INSERT INTO monitor_data.stat_statements_data(
                                 ssd_timestamp, ssd_host_id,
@@ -147,7 +147,7 @@ def create_stat_statement_data(cur, host_id, nr_of_statements, days, interval):
 
 
 def create_load_data(cur, host_id, days, interval):
-    print 'Inserting data points for Load'
+    print('Inserting data points for Load')
 
     sql = """
         INSERT INTO monitor_data.host_load(
@@ -173,7 +173,7 @@ def create_load_data(cur, host_id, days, interval):
 
 
 def create_general_db_stats(cur, host_id, days, interval):
-    print 'Creating general db stats...'
+    print('Creating general db stats...')
     sql = """
             INSERT INTO monitor_data.stat_database_data(
                         sdd_host_id, sdd_timestamp,
@@ -197,7 +197,7 @@ def create_general_db_stats(cur, host_id, days, interval):
 def create_table_data(cur, host_id, nr_of_tables, days, interval):
     create_n_tables(cur, host_id, nr_of_tables)
 
-    print 'Creating table data points...'
+    print('Creating table data points...')
 
     cur.execute('select t_id from tables where t_host_id = %s', (host_id, ))
     tables = [x[0] for x in cur.fetchall()]
@@ -249,9 +249,9 @@ def generate_test_data(connection_url, hostcount, tables, sprocs, days, interval
         cur.execute("SET work_mem TO '64MB';")
         cur.execute('SET search_path TO monitor_data, public;')
 
-        for i in xrange(0, hostcount):
+        for i in range(0, hostcount):
             host_id = 1000 + i
-            print 'Doing host "test-cluster-{}" with host_id = {}'.format(i, host_id)
+            print('Doing host "test-cluster-{}" with host_id = {}'.format(i, host_id))
             clear_test_data(cur, host_id)
             create_hosts(cur, host_id, 'test-cluster-{}'.format(i), 'test{}_db'.format(i))
             create_load_data(cur, host_id, days, interval)
@@ -279,11 +279,11 @@ def main():
     args.config = os.path.expanduser(args.config)
 
     if not os.path.exists(args.config):
-        print 'Configuration file missing:', args.config
+        print('Configuration file missing:', args.config)
         parser.print_help()
         return
 
-    print 'Using configuration file:', args.config
+    print('Using configuration file:', args.config)
 
     settings = None
     with open(args.config, 'rb') as fd:
@@ -303,23 +303,23 @@ def main():
         'dbname=' + settings['database']['name'],
     ))
 
-    print 'PGObserver testdata generator:'
-    print '=============================='
-    print ''
-    print 'Setting connection string to ... ' + connection_url_display
-    print ''
-    print 'Will create ' + str(args.gh) + ' hosts'
-    print 'with ' + str(args.gt) + ' tables'
-    print 'with ' + str(args.gp) + ' stored procedures'
-    print 'with ' + str(args.gd) + ' days of data'
-    print 'with data points every ' + str(args.gi) + ' minutes'
-    print ''
-    print 'Sleeping for 3s ...'
+    print('PGObserver testdata generator:')
+    print('==============================')
+    print('')
+    print('Setting connection string to ... ' + connection_url_display)
+    print('')
+    print('Will create ' + str(args.gh) + ' hosts')
+    print('with ' + str(args.gt) + ' tables')
+    print('with ' + str(args.gp) + ' stored procedures')
+    print('with ' + str(args.gd) + ' days of data')
+    print('with data points every ' + str(args.gi) + ' minutes')
+    print('')
+    print('Sleeping for 3s ...')
     time.sleep(3)
 
     generate_test_data(connection_url, args.gh, args.gt, args.gp, args.gd, args.gi)
 
-    print 'Done'
+    print('Done')
 
 
 if __name__ == '__main__':

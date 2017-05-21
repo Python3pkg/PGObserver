@@ -145,7 +145,7 @@ class TableFrontend(object):
 
         systems = []
 
-        hs = hosts.getHostData().values()
+        hs = list(hosts.getHostData().values())
 
         for h in hs:
             g = flotgraph.SizeGraph("s" + str(h['host_id']))
